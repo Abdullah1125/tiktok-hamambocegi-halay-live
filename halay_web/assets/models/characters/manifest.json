@@ -1,0 +1,216 @@
+{
+  "modeller": [
+    {
+      "id": "cocuk-1-erkek",
+      "dosya": "cocuk-1-erkek.glb",
+      "cinsiyet": "erkek",
+      "roller": [
+        "cocuk"
+      ],
+      "agirlik": 1
+    },
+    {
+      "id": "cocuk-2-erkek",
+      "dosya": "cocuk-2-erkek.glb",
+      "cinsiyet": "erkek",
+      "roller": [
+        "cocuk"
+      ],
+      "agirlik": 1
+    },
+    {
+      "id": "cocuk-4-kiz",
+      "dosya": "cocuk-4-kiz.glb",
+      "cinsiyet": "kadin",
+      "roller": [
+        "cocuk"
+      ],
+      "agirlik": 1
+    },
+    {
+      "id": "damat",
+      "dosya": "damat.glb",
+      "cinsiyet": "erkek",
+      "roller": [
+        "damat"
+      ],
+      "agirlik": 1
+    },
+    {
+      "id": "erkek-01",
+      "dosya": "erkek-01.glb",
+      "cinsiyet": "erkek",
+      "roller": [
+        "yedek"
+      ],
+      "agirlik": 1
+    },
+    {
+      "id": "erkek-1-rocker",
+      "dosya": "erkek-1-rocker.glb",
+      "cinsiyet": "erkek",
+      "roller": [
+        "dansci",
+        "seyirci"
+      ],
+      "agirlik": 1
+    },
+    {
+      "id": "erkek-2-hiphop",
+      "dosya": "erkek-2-hiphop.glb",
+      "cinsiyet": "erkek",
+      "roller": [
+        "dansci",
+        "seyirci"
+      ],
+      "agirlik": 1
+    },
+    {
+      "id": "erkek-3-beyefendi",
+      "dosya": "erkek-3-beyefendi.glb",
+      "cinsiyet": "erkek",
+      "roller": [
+        "dansci",
+        "seyirci"
+      ],
+      "agirlik": 1
+    },
+    {
+      "id": "erkek-4-turist",
+      "dosya": "erkek-4-turist.glb",
+      "cinsiyet": "erkek",
+      "roller": [
+        "dansci",
+        "seyirci"
+      ],
+      "agirlik": 1
+    },
+    {
+      "id": "erkek-5-sporcu",
+      "dosya": "erkek-5-sporcu.glb",
+      "cinsiyet": "erkek",
+      "roller": [
+        "dansci",
+        "seyirci"
+      ],
+      "agirlik": 1
+    },
+    {
+      "id": "erkek-6-kovboy",
+      "dosya": "erkek-6-kovboy.glb",
+      "cinsiyet": "erkek",
+      "roller": [
+        "dansci",
+        "seyirci"
+      ],
+      "agirlik": 1
+    },
+    {
+      "id": "erkek-8-disko",
+      "dosya": "erkek-8-disko.glb",
+      "cinsiyet": "erkek",
+      "roller": [
+        "dansci",
+        "seyirci"
+      ],
+      "agirlik": 1
+    },
+    {
+      "id": "gelin",
+      "dosya": "gelin.glb",
+      "cinsiyet": "kadin",
+      "roller": [
+        "gelin"
+      ],
+      "agirlik": 1
+    },
+    {
+      "id": "hamambocegi",
+      "dosya": "hamambocegi.glb",
+      "cinsiyet": "erkek",
+      "roller": [
+        "davulcu"
+      ],
+      "agirlik": 1
+    },
+    {
+      "id": "kiz-2-disko",
+      "dosya": "kiz-2-disko.glb",
+      "cinsiyet": "kadin",
+      "roller": [
+        "dansci",
+        "seyirci"
+      ],
+      "agirlik": 1
+    },
+    {
+      "id": "kiz-3-kot",
+      "dosya": "kiz-3-kot.glb",
+      "cinsiyet": "kadin",
+      "roller": [
+        "dansci",
+        "seyirci"
+      ],
+      "agirlik": 1
+    },
+    {
+      "id": "kiz-4-balerin",
+      "dosya": "kiz-4-balerin.glb",
+      "cinsiyet": "kadin",
+      "roller": [
+        "dansci",
+        "seyirci"
+      ],
+      "agirlik": 1
+    },
+    {
+      "id": "kiz-5-leopar",
+      "dosya": "kiz-5-leopar.glb",
+      "cinsiyet": "kadin",
+      "roller": [
+        "dansci",
+        "seyirci"
+      ],
+      "agirlik": 1
+    },
+    {
+      "id": "kiz-6-yaz",
+      "dosya": "kiz-6-yaz.glb",
+      "cinsiyet": "kadin",
+      "roller": [
+        "dansci",
+        "seyirci"
+      ],
+      "agirlik": 1
+    },
+    {
+      "id": "kiz-7-fitness",
+      "dosya": "kiz-7-fitness.glb",
+      "cinsiyet": "kadin",
+      "roller": [
+        "dansci",
+        "seyirci"
+      ],
+      "agirlik": 1
+    },
+    {
+      "id": "kiz-8-rock",
+      "dosya": "kiz-8-rock.glb",
+      "cinsiyet": "kadin",
+      "roller": [
+        "dansci",
+        "seyirci"
+      ],
+      "agirlik": 1
+    },
+    {
+      "id": "zurnaci",
+      "dosya": "zurnaci.glb",
+      "cinsiyet": "erkek",
+      "roller": [
+        "zurnaci"
+      ],
+      "agirlik": 1
+    }
+  ]
+}

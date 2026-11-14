@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Halay Live" />
+  <link rel="manifest" href="/static/manifest.json" />
+  <title>Bocek Dugun Sahnesi — TikTok Halay LIVE Studio</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='50' font-size='48'%3E%F0%9F%AA%B3%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/style.css?v=98" />
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "/static/vendor/three.module.min.js",
+        "three/addons/controls/OrbitControls.js": "/static/vendor/OrbitControls.js",
+        "three/addons/loaders/GLTFLoader.js": "/static/vendor/GLTFLoader.js"
+      }
+    }
+  </script>
+</head>
+<body>
+  <script>
+    (function () {
+      var p = new URLSearchParams(location.search);
+      var st = navigator.standalone === true || (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches);
+      var is800x600 = Math.abs(window.innerWidth - 800) <= 24 && Math.abs(window.innerHeight - 600) <= 24;
+      var isOverlay = p.get("obs") === "1" || location.pathname === "/overlay" || st || is800x600;
+      if (isOverlay && p.get("studio") !== "1") document.body.classList.add("obs-mode");
+      if (is800x600 || p.get("stretch") === "1") document.body.classList.add("anamorphic-916");
+      if ((isOverlay && p.get("studio") !== "1") || window.innerWidth <= 768) {
+        document.documentElement.classList.add("init-drawer-closed");
+      }
+    })();
+  </script>
+  <div id="app-shell">
+    <!-- 9:16 TikTok LIVE Dikey Sahne + Ticari Oyun HUD Katmanı -->
+    <div id="stage-frame">
+      <canvas id="webgl-canvas"></canvas>
+      <div id="labels-layer"></div>
+
+      <!-- 11692FonWDI ("Bocek Dugun Sahnesi") 1:1 Birebir Yayın HUD Katmanı -->
+      <div id="hud-layer" class="hud-layer">
+        <!-- 3D TAKI SANDIĞI HEDİYE VE ŞARKI HEDEFİ PİLLİ -->
+        <div id="bocek-chest-pill" class="bocek-chest-pill">
+          <div class="bcp-icon">🎁</div>
+          <div class="bcp-body">
+            <div class="bcp-label">DÜĞÜN TAKI SANDIĞI</div>
+            <div class="bcp-bar-track">
+              <div id="bar-chest-fill" class="bcp-bar-fill" style="width: 15%"></div>
+            </div>
+            <div id="bar-chest-txt" class="bcp-txt">15 / 100 🪙 · Yeni Şarkıya: 85</div>
+          </div>
+        </div>
+
+        <!-- SOL ÜST DURUM & 3x3 HEDİYE AKSİYON TABLOSU (1:1 11692FonWDI) -->
+        <div id="bocek-left-stack" class="bocek-left-stack">
+          <div class="bocek-status-lines">
+            <div class="bs-line"><span class="bs-ico">💃</span> <b id="dash-dancers">0</b> <span>kişi halayda</span></div>
+            <div class="bs-line"><span class="bs-ico">👀</span> <b id="dash-viewers">0</b> <span>izleyici</span></div>
+            <div class="bs-line cosku"><span class="bs-ico">🥁</span> <b id="bocek-cosku-txt">COŞKU</b> <span class="bs-fire">🔥</span></div>
+          </div>
+
+          <div id="bocek-gift-card" class="bocek-gift-card">
+            <div class="bgc-header">💬 <span>HALAY YAZ → HALAYA KATIL!</span></div>
+            <div class="bgc-grid">
+              <div class="bgc-cell" data-sim-role="join" title="Test: Halaya Katıl">
+                <div class="bgc-emo">🌹</div>
+                <div class="bgc-coin">🪙 <b>1</b></div>
+                <div class="bgc-title">HALAYA<br/>KATIL</div>
+              </div>
+              <div class="bgc-cell" data-sim-role="halaybasi" title="Test: Halay Başı Ol">
+                <div class="bgc-emo">👑</div>
+                <div class="bgc-coin">🪙 <b>1+</b></div>
+                <div class="bgc-title">HALAY BAŞI</div>
+                <div class="bgc-sub" id="role-sub-halaybasi">en çok atan</div>
+              </div>
+              <div class="bgc-cell" data-sim-role="davulcu" title="Test: Davulcu Ol">
+                <div class="bgc-emo">🥁</div>
+                <div class="bgc-coin">🪙 <b>30</b></div>
+                <div class="bgc-title">DAVULCU OL</div>
+                <div class="bgc-sub" id="role-sub-davulcu">-</div>
+              </div>
+              <div class="bgc-cell" data-sim-role="zurnaci" title="Test: Zurnacı Ol">
+                <div class="bgc-emo">🎺</div>
+                <div class="bgc-coin">🪙 <b>50</b></div>
+                <div class="bgc-title">ZURNACI OL</div>
+                <div class="bgc-sub" id="role-sub-zurnaci">-</div>
+              </div>
+              <div class="bgc-cell" data-sim-role="gelin" title="Test: Gelin Ol">
+                <div class="bgc-emo">👰</div>
+                <div class="bgc-coin">🪙 <b>99</b></div>
+                <div class="bgc-title">GELİN OL</div>
+                <div class="bgc-sub" id="role-sub-gelin">-</div>
+              </div>
+              <div class="bgc-cell" data-sim-role="damat" title="Test: Damat Ol">
+                <div class="bgc-emo">🤵</div>
+                <div class="bgc-coin">🪙 <b>99</b></div>
+                <div class="bgc-title">DAMAT OL</div>
+                <div class="bgc-sub" id="role-sub-damat">-</div>
+              </div>
+              <div class="bgc-cell" data-sim-role="konfeti" title="Test: Konfeti Pat Pat">
+                <div class="bgc-emo">🎊</div>
+                <div class="bgc-coin">🪙 <b>150</b></div>
+                <div class="bgc-title">KONFETİ PAT<br/>PAT</div>
+              </div>
+              <div class="bgc-cell" data-sim-role="istek" title="Test: İstek Şarkı">
+                <div class="bgc-emo">🎵</div>
+                <div class="bgc-coin">🪙 <b>199</b></div>
+                <div class="bgc-title">İSTEK ŞARKI</div>
+              </div>
+              <div class="bgc-cell" data-sim-role="parasac" title="Test: Para Saç (500 Jeton)">
+                <div class="bgc-emo">💸</div>
+                <div class="bgc-coin">🪙 <b>500</b></div>
+                <div class="bgc-title">PARA SAÇ</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SAĞ ÜST CANLI OLAY TOASTLARI + TOP 5 LİDERLİK TABLOSU (1:1 11692FonWDI) -->
+        <aside id="live-right-dashboard" class="bocek-right-stack">
+          <div id="bocek-right-toasts" class="bocek-right-toasts"></div>
+          <div id="bocek-leaders-box" class="bocek-leaders-box">
+            <div id="dash-leaders-list" class="bocek-leaders-list"></div>
+          </div>
+
+          <!-- Arka plan sayaç uyumluluğu -->
+          <div class="hidden">
+            <b id="dash-likes">0</b>
+            <b id="dash-comments">0</b>
+            <div id="livedeck-mood-fill"></div>
+            <span id="livedeck-mood-label"></span>
+            <div id="top-cta-banner"></div>
+            <div id="dash-vip-roles-card"><div id="dash-vip-roles-list"></div></div>
+            <div id="dash-cities-card"><div id="dash-cities-list"></div></div>
+            <div id="dash-leaders-card"></div>
+            <div id="dash-events-card"><div id="dash-events-list"></div></div>
+          </div>
+        </aside>
+
+        <!-- ALT ORTA KIRMIZI-ALTIN ÇAĞRI PİLLİ & ŞARKI BANDI (1:1 11692FonWDI) -->
+        <div class="bocek-bottom-stack">
+          <div id="join-toast" class="bocek-join-pill hidden">
+            <div id="join-avatars" class="bjp-avatar"></div>
+            <div id="join-message" class="bjp-text"></div>
+          </div>
+
+          <div id="bocek-cta-pill" class="bocek-cta-pill">
+            <span class="bcp-bubble">💬</span>
+            <span class="bcp-yellow">HALAY</span>
+            <span class="bcp-white">yaz, halaya katıl!</span>
+          </div>
+
+          <div id="bocek-music-bar" class="bocek-music-bar">
+            <span class="bmb-note">🎵</span>
+            <span id="bocek-np-title" class="bmb-title">Aylin Demir - Delalım (Diyarbekir Yoluna)</span>
+          </div>
+        </div>
+
+        <div id="hud-arcade-chrome" class="hidden">
+          <div class="hud-top">
+            <div class="hud-title-box">
+              <div id="hud-mode-title">KIR DÜĞÜNÜ</div>
+              <div id="hud-mode-sub">ÇEMBER HALAY &amp; TAKI</div>
+            </div>
+            <div class="hud-stats-stack">
+              <div class="hud-stat-pill" id="hud-stat-players"><b>0</b> katılımcı</div>
+              <div class="hud-stat-pill" id="hud-pill-tempo"><span id="hud-stat-tempo">Tempo <b>x1.0</b></span></div>
+            </div>
+          </div>
+
+          <div class="hud-col">
+            <div class="hud-counter-row">
+              <span id="hud-big-count">0</span>
+              <span id="hud-wins" class="hud-wins-pill hidden">🏆 <b>0</b> TUR AŞILDI</span>
+              <span id="hud-combo-pill" class="hud-combo-pill hidden">⚡ x3 COMBO</span>
+            </div>
+
+            <div class="gbar goal">
+              <div class="gbar-fill" id="bar-goal-fill" style="width: 0%"></div>
+              <span class="gbar-txt" id="bar-goal-txt">HEDEF HALAY · 0/15</span>
+            </div>
+
+            <div class="gbar heat" id="gbar-second">
+              <div class="gbar-fill" id="bar-heat-fill" style="width: 25%"></div>
+              <span class="gbar-txt" id="bar-heat-txt">DÜĞÜN COŞKUSU · %25</span>
+            </div>
+
+            <!-- 3D TAKI SANDIĞI HEDEF BARI -->
+            <div class="gbar chest" id="gbar-chest">
+              <div class="gbar-fill" id="bar-chest-fill" style="width: 15%"></div>
+              <span class="gbar-txt" id="bar-chest-txt">🎁 TAKI SANDIĞI · 15/100 🪙</span>
+            </div>
+
+            <!-- Canlı Çalan 100'lük Halay Jukebox Mini Pill -->
+            <div id="hud-music-pill" class="hud-music-pill">
+              <span class="eq-bars eq-Visualizer" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+              <span id="hud-np-idx" class="np-idx">#1/100</span>
+              <div class="np-marquee-wrap">
+                <span id="hud-np-title" class="np-title">100 Halay Seçkisi Yükleniyor...</span>
+              </div>
+              <button id="hud-btn-play" class="np-mini-btn" type="button" title="Sesi Aç / Kapat">🔊</button>
+              <button id="hud-btn-next" class="np-mini-btn" type="button" title="Sıradaki Halaya Geç">⏭️</button>
+            </div>
+
+            <div id="hud-podium" class="hud-podium"></div>
+            <div id="hud-leader" class="hud-leader hidden"></div>
+          </div>
+
+          <div class="hud-dock" id="hud-dock">
+            <div id="gift-ladder" class="gift-ladder"></div>
+            <div id="hud-ticker" class="hud-ticker"></div>
+          </div>
+        </div>
+
+        <!-- ŞEHİR & MEMLEKET KAPIŞMASI (81 İL SKOR TABLOSU) -->
+        <div id="hud-city-battle" class="hud-city-battle">
+          <div class="hcb-title">🏆 MEMLEKET KAPIŞMASI</div>
+          <div id="hcb-list" class="hcb-list">
+            <div class="hcb-row"><span class="hcb-rank">1</span><span class="hcb-city">Şanlıurfa</span><span class="hcb-score">14</span></div>
+            <div class="hcb-row"><span class="hcb-rank">2</span><span class="hcb-city">Diyarbakır</span><span class="hcb-score">12</span></div>
+            <div class="hcb-row"><span class="hcb-rank">3</span><span class="hcb-city">Adana</span><span class="hcb-score">10</span></div>
+            <div class="hcb-row"><span class="hcb-rank">4</span><span class="hcb-city">Trabzon</span><span class="hcb-score">8</span></div>
+          </div>
+        </div>
+
+        <div id="hud-pop-banner"></div>
+
+        <!-- ORTA BORDO-ALTIN HEDİYE / PARA TABANCASI DUYURU KARTI (1:1 frame_24s.png) -->
+        <div id="gift-alert" class="bocek-gift-alert hidden">
+          <div id="gift-alert-icon" class="bga-top">🎉 Gül 🎉</div>
+          <div id="gift-alert-text" class="bga-sub">Para Tabancası gönderdi! <span class="bga-coin">🪙 500</span></div>
+        </div>
+
+        <!-- TIKMAX 1:1 "Halaya Hoş Geldin [Kullanıcı]" KARTI (Frame 25s) -->
+        <div id="welcome-alert" class="bocek-welcome-card hidden">
+          <div class="bwc-avatar-wrap">
+            <span id="bwc-badge">👋</span>
+          </div>
+          <div class="bwc-content">
+            <div class="bwc-tag">YENİ HALAYCI</div>
+            <div id="bwc-nick" class="bwc-nick">Halaya Hoş Geldin!</div>
+          </div>
+        </div>
+
+        <!-- Sol Alt Köşe Canlı Bağlantı Durumu (Sahnede Gizli) -->
+        <button id="stage-conn-pill" class="stage-conn-pill waiting hidden" type="button" title="Canlı Yayın Durumu &amp; Ayarlar">
+          <span class="conn-dot"></span>
+          <span id="stage-conn-text"></span>
+        </button>
+
+        <!-- Sağ Alt Köşe Ultra-Minimal Ses/Şarkı & Ayar Kontrolü (Sahneyi Kapatmaz) -->
+        <div id="mini-corner-audio" class="mini-corner-audio">
+          <button id="mini-btn-play" type="button" title="Müziği Aç / Kapat">🔊</button>
+          <button id="mini-btn-tts" type="button" title="AI Düğün Spikeri Sesini Aç / Tek Tuşla Sustur (Panic Mute)">🗣️</button>
+          <button id="mini-btn-next" type="button" title="Sıradaki Halaya Geç">⏭️</button>
+          <button id="mini-btn-settings" type="button" title="Yayın &amp; Sahne Ayarları">⚙️</button>
+        </div>
+      </div>
+
+      <!-- TikTok Mobil Arayüz Güvenli Alan Rehberi (Top %7, Sağ %13, Alt %30) -->
+      <div id="safe-zone-overlay" class="safe-zone-overlay hidden">
+        <div class="sz-top">TİKTOK ÜST BAR (%7) — YAYINCI PROFİLİ &amp; İZLEYİCİ SAYISI</div>
+        <div class="sz-right">BEĞENİ<br/>PAYLAŞ<br/>(%13)</div>
+        <div class="sz-bottom">TİKTOK SOHBET AKISI &amp; HEDİYE ÇUBUĞU (%30 KAPALI ALAN)</div>
+      </div>
+
+      <button id="mobile-tap-hint" type="button" class="mobile-tap-hint hidden">
+        🔊 HALAY MÜZİĞİNİ AÇMAK İÇİN DOKUN (100 PARÇA HAZIR)
+      </button>
+      <button id="toggle-drawer-btn" type="button" title="Kontrol Panelini Aç/Kapat (H)">⚙️ Stüdyo</button>
+    </div>
+
+    <!-- Pro Broadcast Studio Console (4 Sekmeli Modern Yayıncı Masası) -->
+    <aside id="control-drawer">
+      <div class="drawer-header">
+        <div class="brand-row">
+          <div class="brand-logo">🪳</div>
+          <div>
+            <h2>Halay LIVE Pro Studio <span class="ver-tag">v3.0 ECC</span></h2>
+            <p id="conn-badge" class="badge waiting">CANLI YAYIN BEKLENİYOR</p>
+          </div>
+        </div>
+        <button id="close-drawer-btn" type="button" title="Gizle (H)">✕</button>
+      </div>
+
+      <!-- Sekme Navigasyonu -->
+      <nav class="studio-tabs" role="tablist">
+        <button type="button" class="tab-btn active" data-tab="tab-stream">📡 Yayın</button>
+        <button type="button" class="tab-btn" data-tab="tab-jukebox">🎵 100 Halay <span id="tab-jb-badge" class="tab-pill">100</span></button>
+        <button type="button" class="tab-btn" data-tab="tab-stage">🎭 Sahne &amp; Reji</button>
+        <button type="button" class="tab-btn" data-tab="tab-rules">🎯 Kural &amp; Akış</button>
+      </nav>
+
+      <div class="tab-panels">
+        <!-- SEKME 1: YAYIN BAĞLANTISI, MOBİL TÜNEL & HIZLI TEST -->
+        <div id="tab-stream" class="tab-pane active">
+          <section class="card">
+            <h3>🔴 Canlı Yayın Bağlantısı</h3>
+            <div class="row">
+              <input id="tiktok-user-input" type="text" placeholder="Kendi @kullaniciadin (şifresiz)" />
+              <button id="btn-connect" type="button" class="btn primary">🔴 Bağla</button>
+            </div>
+            <div class="row mt-6">
+              <button id="btn-discover" type="button" class="btn gold-btn" style="flex:1.5">⚡ Canlı Yayın Bul &amp; Test Et</button>
+              <button id="btn-disconnect" type="button" class="btn subtle">Durdur</button>
+              <button id="btn-tikfinity" type="button" class="btn subtle" style="flex:0">TikFinity</button>
+            </div>
+            <div class="row mt-6">
+              <input id="tiktok-session-input" type="password" placeholder="Opsiyonel: TikTok sessionid çerezi" />
+            </div>
+            <p id="status-note" class="hint mt-6">Kullanıcı adını kaydedip yayını başlatabilirsin; sistem yayın açıldığı saniye otomatik yakalar.</p>
+          </section>
+
+          <section class="card">
+            <h3>📱 Mobil 5G Ekran Yayını &amp; PC OBS Linkleri</h3>
+            <label class="field-label">📱 Telefon Ekran Yayını (4.5G/5G Her Yerden HTTPS Tüneli):</label>
+            <div class="row">
+              <input id="lan-url-box" type="text" readonly value="İnternet tüneli hazırlanıyor..." />
+              <button id="btn-copy-lan" type="button" class="btn primary" style="flex:0">Kopyala</button>
+            </div>
+            <div class="qr-box mt-6">
+              <img id="lan-qr-img" referrerpolicy="no-referrer" src="" alt="QR" onerror="this.style.display='none'" />
+              <div class="hint">
+                <b>1️⃣ Safari'de Aç:</b> QR kodu okut → ekrana <b>1 kez dokun</b> (100 Halay müziği başlar!).<br/>
+                <b>2️⃣ Görüntü &amp; Halay Sesini Yayına Ver:</b> iPhone sağ üstten <b>Denetim Merkezi'ni indir</b> → <b>⏺️ Ekran Kaydı</b> tuşuna <b>2 sn basılı tut</b> → listeden <b>TikTok</b> seç.<br/>
+                <b>3️⃣ 🔇 Kendi Sesini Kapat (Sadece Halay Çalsın):</b> Aynı ekranda en alttaki kırmızı <b>🎙️ Mikrofon Açık</b> simgesine dokunup <b>Mikrofon Kapalı</b> yap (veya TikTok yayın ekranındaki 🎙️ mikrofon ikonunu kapat). Böylece dış sesin hiç gitmez, yayına <b>sadece 100 Halay müziği</b> gider!
+              </div>
+            </div>
+            <label class="field-label mt-6">💻 PC OBS / TikTok LIVE Studio Tarayıcı Kaynağı (1080x1920):</label>
+            <div class="row">
+              <input id="obs-url-box" type="text" readonly value="http://lvh.me:9944/?obs=1" />
+              <button id="btn-copy-obs" type="button" class="btn subtle" style="flex:0">Kopyala</button>
+            </div>
+          </section>
+
+          <section class="card">
+            <h3>🧪 TikMax &amp; Sahne Hızlı Simülatörü (Yayından Önce Dene)</h3>
+            <div class="sfx-grid">
+              <button id="btn-sim-welcome" type="button" class="btn primary">👋 Yeni Katılan (El Salla)</button>
+              <button id="btn-sim-gelin" type="button" class="btn gold-btn">👰 Geline Çeyrek Tak</button>
+              <button id="btn-sim-damat" type="button" class="btn accent">🤵 Damada Dolar Tak</button>
+              <button id="btn-sim-davul" type="button" class="btn action">🥁 Davulcu Çoştur</button>
+              <button id="btn-sim-mesale" type="button" class="btn gold-btn">💥 Meşale &amp; Fişek</button>
+              <button id="btn-sim-add5" type="button" class="btn subtle">➕ +5 Halaycı Ekle</button>
+              <button id="btn-sim-boss" type="button" class="btn primary">👑 Halaybaşı Yap</button>
+              <button id="btn-sim-fever" type="button" class="btn action">🔥 Fever Şovu Başlat</button>
+            </div>
+          </section>
+        </div>
+
+        <!-- SEKME 2: 100 YOUTUBE HALAY KESİNTİSİZ JUKEBOX -->
+        <div id="tab-jukebox" class="tab-pane">
+          <section class="card jukebox-hero">
+            <div class="jb-now-header">
+              <div class="eq-bars eq-Visualizer large"><i></i><i></i><i></i><i></i></div>
+              <div class="jb-meta">
+                <span id="jb-now-badge" class="jb-badge">KESİNTİSİZ 100 HALAY RADYOSU</span>
+                <h4 id="jb-now-title">Yükleniyor...</h4>
+                <p id="jb-now-sub">YouTube Halay Seçkisi • Otomatik Geçiş Aktif</p>
+              </div>
+            </div>
+
+            <div class="jb-progress-wrap mt-6">
+              <div class="jb-progress-bar"><div id="jb-progress-fill" style="width:0%"></div></div>
+              <div class="jb-time-row">
+                <span id="jb-time-cur">00:00</span>
+                <span id="stat-bpm">122 BPM</span>
+                <span id="jb-time-dur">00:00</span>
+              </div>
+            </div>
+
+            <div class="jb-controls mt-6">
+              <button id="btn-jb-prev" type="button" class="btn subtle" title="Önceki Halay">⏮️</button>
+              <button id="btn-audio" type="button" class="btn accent" style="flex:2">🔊 Çalıyor (Duraklat)</button>
+              <button id="btn-jb-next" type="button" class="btn primary" title="Sıradaki Halay">⏭️ Sıradaki</button>
+              <button id="btn-jb-shuffle" type="button" class="btn subtle" title="Karışık Çal">🔀</button>
+            </div>
+
+            <div class="row mt-6">
+              <span class="field-label" style="margin:0;white-space:nowrap">🔈 Ses:</span>
+              <input id="jb-volume-slider" type="range" min="0" max="100" value="90" style="flex:1" />
+              <span id="jb-vol-label" class="stat-pill">90%</span>
+            </div>
+
+            <div id="jb-dj-queue-box" class="jb-dj-queue hidden mt-6"></div>
+          </section>
+
+          <section class="card playlist-card">
+            <div class="row">
+              <input id="jb-search-input" type="text" placeholder="🔍 100 Halay içinde ara (Şemmame, Erik Dalı, Urfa, Horon...)" />
+            </div>
+            <div id="jb-cat-chips" class="cat-chips mt-6">
+              <button type="button" class="chip active" data-cat="all">Tümü (100)</button>
+              <button type="button" class="chip" data-cat="dugun_semmame">💃 Düğün</button>
+              <button type="button" class="chip" data-cat="agir_grani">🔥 Ağır/Grani</button>
+              <button type="button" class="chip" data-cat="ankara_oyun">⚡ Erik Dalı</button>
+              <button type="button" class="chip" data-cat="karadeniz_horon">🌊 Horon</button>
+              <button type="button" class="chip" data-cat="dogu_govend">🥁 Yöresel</button>
+              <button type="button" class="chip" data-cat="tiktok_remix">🚀 Remix</button>
+            </div>
+
+            <div id="jb-track-list" class="jb-track-list mt-6"></div>
+
+            <details class="custom-mp3-details mt-6">
+              <summary>📂 Kendi Özel MP3 Dosyanı Yükle (Opsiyonel)</summary>
+              <div class="row mt-6">
+                <input id="mp3-file-input" type="file" accept="audio/*" />
+                <button id="btn-clear-mp3" type="button" class="btn subtle" style="flex:0">100 Halay'a Dön</button>
+              </div>
+            </details>
+          </section>
+        </div>
+
+        <!-- SEKME 3: SAHNE MODU, KARAKTER & CANLI YÖNETMEN MASASI -->
+        <div id="tab-stage" class="tab-pane">
+          <section class="card">
+            <h3>🎭 Oyun Modu, Karakter &amp; Kamera</h3>
+            <div class="grid-2">
+              <div>
+                <label class="field-label">Sahne &amp; Halay Dizilimi</label>
+                <select id="scene-mode-select">
+                  <option value="kirdgunu_ring" selected>💍 Kır Düğünü Çemberi</option>
+                  <option value="halay_snake">🐍 Meydan S-Yılan Halay</option>
+                  <option value="horon">🌊 Karadeniz Düğün Horonu</option>
+                  <option value="zeybek">🦅 Zeybek (Harmandalı Efe)</option>
+                  <option value="kapisma">⚔️ Gelin vs Damat Kapışması</option>
+                </select>
+              </div>
+              <div>
+                <label class="field-label">3D Karakter Stili</label>
+                <select id="avatar-style-select">
+                  <option value="roach" selected>🪳 Hamam Böceği (Viral)</option>
+                  <option value="villager">🕺 Düğün Halaycıları</option>
+                  <option value="mixed">🎭 Karışık (Böcek + İnsan)</option>
+                </select>
+              </div>
+            </div>
+            <div class="grid-2 mt-6">
+              <div>
+                <label class="field-label">Yedek Sentez Makamı</label>
+                <select id="music-preset-select">
+                  <option value="halay" selected>🥁 Hicaz Davul-Zurna (2/4)</option>
+                  <option value="karadeniz">🎻 Karadeniz Kemençe (7/16)</option>
+                  <option value="kina">💃 Kına &amp; Roman Havası (9/8)</option>
+                  <option value="erikdali">🎶 Erik Dalı Oyun Havası</option>
+                </select>
+              </div>
+              <div>
+                <label class="field-label">Kamera Rejisi</label>
+                <select id="camera-mode-select">
+                  <option value="director" selected>🎬 Oto Yönetmen</option>
+                  <option value="wide">🌕 Geniş Meydan</option>
+                  <option value="runner">🏃 Koşu Yakın</option>
+                  <option value="free">🖱️ Serbest Mouse</option>
+                </select>
+              </div>
+            </div>
+            <div class="row mt-6">
+              <label class="switch-row" style="flex:1"><input type="checkbox" id="chk-tts" checked /> <span>🗣️ Türkçe Sesli Anons</span></label>
+              <label class="switch-row"><input type="checkbox" id="chk-hud" /> <span>📊 Ekstra Barlar</span></label>
+            </div>
+            <div class="row mt-6">
+              <label class="switch-row" style="flex:1"><input type="checkbox" id="chk-starter" /> <span>🎭 Önizleme: Örnek İsimler &amp; Sohbet Balonları</span></label>
+            </div>
+          </section>
+
+          <section class="card">
+            <h3>🎛️ Canlı Yönetmen &amp; Efekt Masası (OBS &amp; Mobil Senkron)</h3>
+            <div class="sfx-grid">
+              <button id="btn-sfx-clap" type="button" class="btn action" title="Kısayol: 1">👏 Toplu Alkış [1]</button>
+              <button id="btn-sfx-whistle" type="button" class="btn action" title="Kısayol: 2">😗 Zılgıt &amp; Islık [2]</button>
+              <button id="btn-sfx-gold" type="button" class="btn gold-btn" title="Kısayol: 3">🪙 Gelin/Damat Altın [3]</button>
+              <button id="btn-sfx-confetti" type="button" class="btn action" title="Kısayol: 4">🎆 Havai Fişek [4]</button>
+              <button id="btn-sfx-squeeze" type="button" class="btn primary" title="Kısayol: Space">🔥 Halayı Zıplat! [Space]</button>
+              <button id="btn-safezone" type="button" class="btn subtle">🛡️ TikTok Alanı</button>
+            </div>
+            <div class="cmd-cheatsheet mt-6">
+              <b>💬 İzleyici Sohbet &amp; Hediye Komutları:</b>
+              <span><code>katıl / şehir adı</code> Halaya gir &amp; Memleket puanı</span> •
+              <span><code>halay / horon / zeybek</code> Dansı değiştir</span> •
+              <span><code>hızlan / yavaşla</code> Tempo vitesi</span> •
+              <span><code>🎁 Hediye</code> 👑 Halaybaşı / 🥁 Davulcu / 🎺 Zurnacı ol (+15x Şehir Puanı)</span>
+            </div>
+          </section>
+        </div>
+
+        <!-- SEKME 4: KATILIM KURALLARI, CANLI AKIŞ & ECC SİSTEM SAĞLIĞI -->
+        <div id="tab-rules" class="tab-pane">
+          <section class="card">
+            <h3>🎯 Katılım &amp; Hediye Jeton Eşikleri</h3>
+            <div class="grid-3">
+              <div>
+                <label class="field-label">Beğeni Eşiği</label>
+                <input id="like-threshold-input" type="number" min="1" max="50000" value="500" />
+              </div>
+              <div>
+                <label class="field-label">2. Kademe (Jeton)</label>
+                <input id="tier2-input" type="number" min="2" max="5000" value="20" />
+              </div>
+              <div>
+                <label class="field-label">Halaybaşı (Jeton)</label>
+                <input id="tier3-input" type="number" min="5" max="20000" value="50" />
+              </div>
+            </div>
+            <div class="row mt-6">
+              <input id="banner-text-input" type="text" value="500 b3gen1 HALAYA KAT1l" placeholder="Üst Çağrı Yazısı" />
+              <div id="stat-dancers" class="stat-pill">0 Katılımcı</div>
+            </div>
+            <label class="switch-row mt-6"><input type="checkbox" id="chk-kw" checked /> <span>Sohbete <b>"katıl / gelin / damat"</b> yazan girsin</span></label>
+            <label class="switch-row mt-6"><input type="checkbox" id="chk-any-chat" /> <span>Sohbete <b>herhangi bir yorum</b> yazan girsin</span></label>
+            <label class="switch-row mt-6"><input type="checkbox" id="chk-follow" checked /> <span><b>Takip eden</b> &amp; <b>Hediye atan</b> anında girsin</span></label>
+            <label class="switch-row mt-6"><input type="checkbox" id="chk-enter" /> <span>Yayına <b>giren herkes</b> anında girsin</span></label>
+          </section>
+
+          <section class="card">
+            <h3>📡 Canlı Yayın Olay Akışı &amp; ECC Sistem Zırhı</h3>
+            <div id="ecc-health-bar" class="ecc-health-bar">
+              <span>🛡️ SSRF Koruması: Aktif</span>
+              <span id="ecc-cache-stat">⚡ Önbellek: 8/100</span>
+              <span>✅ 0 Sessiz Hata</span>
+            </div>
+            <div id="live-feed-box" class="feed-box mt-6">
+              <div class="feed-empty">Canlı yayına bağlandığında gerçek beğeniler, DJ istekleri, yorumlar ve hediyeler burada akar.</div>
+            </div>
+            <div class="row mt-6">
+              <button id="btn-reset" type="button" class="btn subtle">🗑️ Yeni Tur İçin Meydanı &amp; Skorları Sıfırla</button>
+            </div>
+          </section>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <script type="module" src="/static/js/app.js?v=100"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+logs/
+*.log
+data/*.db
+data/*.db-shm
+data/*.db-wal
+data/llm_key_pool.json
+static/audio/halay_cache/*.m4a
+static/audio/halay_cache/*.mp3
+static/audio/tts/*.mp3
+.env
+.env.*

@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Halay Yönetmen &amp; Çok Dilli AI Sunucu Paneli (v50)</title>
+  <style>
+    :root { color-scheme: dark; --bg: #0b0e16; --card: rgba(20, 25, 39, 0.90); --border: rgba(255,255,255,0.12); --text: #f3f6ff; --muted: #9aa6c4; --acc: #38bdf8; --purp: #a855f7; --gold: #fbbf24; --ok: #34d399; --warn: #fbbf24; }
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 14px; font: 13px/1.45 system-ui, -apple-system, 'Segoe UI', sans-serif; background: radial-gradient(circle at top, #181f35, var(--bg)); color: var(--text); }
+    .grid { max-width: 1260px; margin: 0 auto; display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 12px 14px; }
+    .head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+    h1, h2 { margin: 0; font-size: 14px; letter-spacing: .02em; }
+    .sec { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--gold); margin: 8px 0 5px; }
+    .pill { padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 600; background: rgba(52,211,153,.14); color: var(--ok); border: 1px solid rgba(52,211,153,.3); }
+    .pill.warn { background: rgba(251,191,36,.14); color: var(--warn); border-color: rgba(251,191,36,.35); }
+    .row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 6px; }
+    button { cursor: pointer; border: 1px solid var(--border); background: rgba(255,255,255,.06); color: var(--text); border-radius: 9px; padding: 6px 10px; font: 600 12px/1.2 inherit; transition: .15s; }
+    button:hover { background: rgba(255,255,255,.14); }
+    button.on { background: rgba(56,189,248,.22); border-color: rgba(56,189,248,.6); color: #bae6fd; }
+    button.prim { background: linear-gradient(135deg, #7c3aed, #2563eb); border: none; color: #fff; }
+    button.ok { background: linear-gradient(135deg, #059669, #0284c7); border: none; color: #fff; }
+    input, select { padding: 7px 10px; border-radius: 9px; border: 1px solid var(--border); background: rgba(0,0,0,.35); color: var(--text); font: 12px inherit; }
+    input { flex: 1; min-width: 150px; }
+    label.chk { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; color: var(--muted); cursor: pointer; }
+    label.chk input { flex: none; min-width: auto; width: 14px; height: 14px; }
+    .note { font-size: 11.5px; color: var(--muted); margin: 4px 0 8px; }
+    .feed { height: 210px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; padding-right: 4px; }
+    .item { padding: 7px 10px; border-radius: 10px; background: rgba(255,255,255,.04); border-left: 3px solid var(--acc); font-size: 12px; }
+    .item.gift { border-left-color: var(--gold); background: rgba(251,191,36,.08); }
+    .item.ai { border-left-color: var(--purp); background: rgba(168,85,247,.1); }
+    .item.bot { border-left-color: var(--ok); background: rgba(52,211,153,.09); }
+    .meta { font-size: 11px; color: var(--muted); display: flex; justify-content: space-between; margin-bottom: 2px; }
+  </style>
+</head>
+<body>
+  <div class="grid">
+    <div class="card">
+      <div class="head"><h1>🎬 Sinematik Sahne &amp; Yönetmen Masası</h1><span id="dirBadge" class="pill">v39 Hazır</span></div>
+      <div class="sec">Sahne Atmosferi &amp; Mekanlar</div>
+      <div class="row">
+        <button data-dir="atmosphere" data-val="day" onclick="setDir('atmosphere','day')">☀️ Gündüz Kır Düğünü</button>
+        <button data-dir="atmosphere" data-val="sunset" onclick="setDir('atmosphere','sunset')">🌅 Altın Sahil</button>
+        <button data-dir="atmosphere" data-val="night" onclick="setDir('atmosphere','night')">🌙 Gece Neon Festival</button>
+        <button data-dir="atmosphere" data-val="snow" onclick="setDir('atmosphere','snow')">❄️ Karlı Dağ Düğünü</button>
+        <button data-dir="atmosphere" data-val="rain" onclick="setDir('atmosphere','rain')">🌧️ Yağmurlu Meydan</button>
+      </div>
+      <div class="sec">Hava Şartları &amp; Eğlence Efektleri</div>
+      <div class="row">
+        <button data-dir="weather" data-val="auto" onclick="setDir('weather','auto')">🌤️ Oto Hava</button>
+        <button data-dir="weather" data-val="snow" onclick="setDir('weather','snow')">❄️ Kar Yağışı</button>
+        <button data-dir="weather" data-val="rain" onclick="setDir('weather','rain')">🌧️ Yağmur &amp; Şimşek</button>
+        <button data-dir="weather" data-val="fireflies" onclick="setDir('weather','fireflies')">✨ Ateş Böceği</button>
+        <button data-dir="weather" data-val="confetti" onclick="setDir('weather','confetti')">🎊 Konfeti Şöleni</button>
+        <button data-dir="weather" data-val="disco" onclick="setDir('weather','disco')">🪩 Disko Lazer</button>
+        <button onclick="setDir('director_seq','fireworks')">🎆 Havai Fişek</button>
+      </div>
+      <div class="sec">Kamera Yönetmeni</div>
+      <div class="row">
+        <button data-dir="camera" data-val="auto" onclick="setDir('camera','auto')">🎬 Otomatik</button>
+        <button data-dir="camera" data-val="wide" onclick="setDir('camera','wide')">🏟️ Geniş Meydan</button>
+        <button data-dir="camera" data-val="leader" onclick="setDir('camera','leader')">👑 Halaybaşı Odak</button>
+        <button data-dir="camera" data-val="drone" onclick="setDir('camera','drone')">🚁 Sinematik Drone</button>
+      </div>
+      <div class="sec">Halay Figürü &amp; Meydan Zemini</div>
+      <div class="row">
+        <button data-dir="figure" data-val="auto" onclick="setDir('figure','auto')">🔄 Oto Figür</button>
+        <button data-dir="figure" data-val="ana" onclick="setDir('figure','ana')">🕺 Ana Halay</button>
+        <button data-dir="figure" data-val="one" onclick="setDir('figure','one')">🔥 Öne Çıkış</button>
+        <button data-dir="figure" data-val="cokme" onclick="setDir('figure','cokme')">⚡ Çökme</button>
+        <button data-dir="figure" data-val="kol" onclick="setDir('figure','kol')">🙌 Kol Figürü</button>
+      </div>
+      <div class="row" style="margin-top:6px">
+        <button data-dir="floor" data-val="altigen" onclick="setDir('floor','altigen')">⬡ Altıgen Taş</button>
+        <button data-dir="floor" data-val="seramik" onclick="setDir('floor','seramik')">🏛️ Seramik</button>
+        <button data-dir="floor" data-val="kum" onclick="setDir('floor','kum')">🏖️ Kumsal</button>
+        <button data-dir="floor" data-val="toprak" onclick="setDir('floor','toprak')">🌿 Kır Toprağı</button>
+      </div>
+      <div class="sec">Yönetmen Sekansları, Çift &amp; Tempo</div>
+      <div class="row">
+        <button onclick="setDir('director_seq','spotlight')">🔦 Spot Işık</button>
+        <button onclick="setDir('director_seq','celebrate')">🎆 Kutlama Sekansı</button>
+        <button onclick="setDir('director_seq','para')">💸 Para Kamerası</button>
+        <button onclick="setDir('director_seq','couple_cheer')">👰🤵 Çift Coşkusu</button>
+        <button data-dir="tempo" data-val="peak" onclick="setDir('tempo','peak')">⚡ 172 BPM Zirve</button>
+        <button data-dir="tempo" data-val="normal" onclick="setDir('tempo','normal')">🎵 144 BPM Normal</button>
+        <button data-dir="davul" data-val="true" onclick="setDir('davul',!(dirState.davul))">🥁 Dahili Davul</button>
+      </div>
+      <div class="sec">Pasif 3D Dünya Efektleri &amp; TikOyun Motor Ayarları</div>
+      <div class="row">
+        <button onclick="fireWorldFx('fireflies')">✨ Ateşböceği</button>
+        <button onclick="fireWorldFx('birds')">🕊️ Kuş Sürüsü</button>
+        <button onclick="fireWorldFx('kids')">👧 Çocukları Coştur</button>
+        <button onclick="fireWorldFx('wanderers')">🧑‍🌾 Köylüleri Yürüt</button>
+        <button onclick="fireWorldFx('banquet')">🍽️ Ziyafet Masaları</button>
+        <button onclick="fireWorldFx('para_throw')">💸 3D Para Saç</button>
+      </div>
+      <div class="row" style="margin-top:6px; align-items:center;">
+        <label style="font-size:12px;">Max Dansçı: <b id="lblMaxDancers">200</b>
+          <input id="inpMaxDancers" type="range" min="20" max="200" step="10" value="200" onchange="setTikoyunOpt({maxDancers:Number(this.value)})" oninput="document.getElementById('lblMaxDancers').textContent=this.value" style="width:90px;vertical-align:middle;">
+        </label>
+        <label style="font-size:12px;">Para Süresi: <b id="lblParaSec">5</b>s
+          <input id="inpParaSec" type="range" min="2" max="30" step="1" value="5" onchange="setTikoyunOpt({paraSeconds:Number(this.value)})" oninput="document.getElementById('lblParaSec').textContent=this.value" style="width:80px;vertical-align:middle;">
+        </label>
+        <button onclick="setTikoyunOpt({camera:'sinematik'})">🎬 Sinematik</button>
+        <button onclick="setTikoyunOpt({camera:'serbest'})">🕹️ Serbest</button>
+        <button onclick="setTikoyunOpt({format:'dikey'})">📱 9:16 Dikey</button>
+        <button onclick="setTikoyunOpt({format:'yatay'})">🖥️ 16:9 Yatay</button>
+        <button onclick="setTikoyunOpt({genderSwap: !(tikoState.genderSwap!==false)})">👗 Cinsiyet Komutu</button>
+        <button onclick="setTikoyunOpt({action:'halayreset'})" style="background:#7f1d1d;">🧹 Halay Reset</button>
+        <button onclick="setTikoyunOpt({action:'reset_defaults'})">↺ Varsayılanlar</button>
+      </div>
+      <div class="sec">Dashboard Dili (8 Dil)</div>
+      <div class="row">
+        <button data-dir="hud_lang" data-val="auto" onclick="setDir('hud_lang','auto')">🦎 Oto Bukalemun</button>
+        <button data-dir="hud_lang" data-val="tr" onclick="setDir('hud_lang','tr')">🇹🇷 TR</button>
+        <button data-dir="hud_lang" data-val="en" onclick="setDir('hud_lang','en')">🇬🇧 EN</button>
+        <button data-dir="hud_lang" data-val="ru" onclick="setDir('hud_lang','ru')">🇷🇺 RU</button>
+        <button data-dir="hud_lang" data-val="ar" onclick="setDir('hud_lang','ar')">🇸🇦 AR</button>
+        <button data-dir="hud_lang" data-val="es" onclick="setDir('hud_lang','es')">🇪🇸 ES</button>
+        <button data-dir="hud_lang" data-val="de" onclick="setDir('hud_lang','de')">🇩🇪 DE</button>
+        <button data-dir="hud_lang" data-val="fr" onclick="setDir('hud_lang','fr')">🇫🇷 FR</button>
+        <button data-dir="hud_lang" data-val="az" onclick="setDir('hud_lang','az')">🇦🇿 AZ</button>
+      </div>
+      <div class="sec">Kapışma (VS) Barı</div>
+      <div class="row">
+        <button data-dir="vs_mode" data-val="auto" onclick="setDir('vs_mode','auto')">🔄 Otomatik</button>
+        <button data-dir="vs_mode" data-val="world" onclick="setDir('vs_mode','world')">🌍 Türkiye vs Dünya</button>
+        <button data-dir="vs_mode" data-val="city" onclick="setDir('vs_mode','city')">🏙️ Şehirler Savaşı</button>
+        <button data-dir="vs_mode" data-val="wedding" onclick="setDir('vs_mode','wedding')">👰🤵 Kız vs Damat</button>
+      </div>
+      <div class="sec">Anlık 3D Sahne Şovları &amp; Ekonomi 2.0</div>
+      <div class="row">
+        <button onclick="fireFx('giant')">🦖 Dev Böcek</button>
+        <button onclick="fireFx('shockwave')">⚡ Şok Dalgası</button>
+        <button onclick="fireFx('disco')">🪩 Gece Diskosu</button>
+        <button class="prim" onclick="reloadStream()">🔄 Yayını Yenile</button>
+      </div>
+      <div class="row">
+        <button onclick="econTest({action:'gift',uid:'panel_king',nickname:'DonutKral',gift_name:'Donut',diamonds:30,gift_id:5879,diamond_unit:30})">🍩 Donut</button>
+        <button onclick="econTest({action:'gift',uid:'panel_bride',nickname:'DivaGelin',gift_name:'Elle Kalp',diamonds:100,gift_id:5924,diamond_unit:100})">👰 Gelin</button>
+        <button onclick="econTest({action:'chat',uid:'panel_costume',nickname:'StilTest',text:'1'})">👗 '1' Kız</button>
+        <button onclick="econTest({action:'chat',uid:'panel_costume',nickname:'StilTest',text:'2'})">🕺 '2' Efe</button>
+        <button onclick="econTest({action:'next_round'})">🏁 Yeni Tur</button>
+      </div>
+      <div class="sec">🌍 Çok Dilli DJ İstek Kontrol &amp; Test</div>
+      <div class="row">
+        <button id="btnOpenDj" onclick="toggleOpenDj()">Açık DJ Modu: ...</button>
+        <button onclick="reqSong('ru','🇷🇺','Kalinka','IvanRU')">🇷🇺 Rusça (!трек)</button>
+        <button onclick="reqSong('ar','🇸🇦','Dabke','TariqAR')">🇸🇦 Arapça (!أغنية)</button>
+        <button onclick="reqSong('az','🇦🇿','Yalli','OrxanAZ')">🇦🇿 Azerice (!mahni)</button>
+        <button onclick="reqSong('en','🇬🇧','Balkan Beat','AlexEN')">🇬🇧 İngilizce (!song)</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="head"><h1>💬 İki Yönlü Yayına Yazma &amp; AI Sunucu</h1><span id="chatModeBadge" class="pill warn">SessionID Bekleniyor</span></div>
+      <div class="sec">Canlı Yayına &amp; Sahneye Direkt Mesaj Yaz</div>
+      <div class="row">
+        <input id="manualChatInp" type="text" maxlength="148" placeholder="İzleyicilere canlı sohbetten + sahneden yazın..." onkeydown="if(event.key==='Enter')sendManualChat()" />
+        <select id="manualLang">
+          <option value="tr">🇹🇷 TR</option><option value="ru">🇷🇺 RU</option><option value="en">🇬🇧 EN</option>
+          <option value="ar">🇸🇦 AR</option><option value="az">🇦🇿 AZ</option><option value="es">🇪🇸 ES</option>
+          <option value="de">🇩🇪 DE</option><option value="fr">🇫🇷 FR</option>
+        </select>
+        <button class="ok" onclick="sendManualChat()">📨 Gönder</button>
+      </div>
+      <div class="row">
+        <label class="chk"><input id="manualSpeakChk" type="checkbox" checked /> 🔊 Sahnede sesli + altyazılı da okunsun</label>
+      </div>
+      <div class="row" style="margin-top:4px">
+        <button id="btnAi" onclick="toggleOpt('enabled')">Oto Sohbet Botu: ...</button>
+        <button id="btnVoice" onclick="toggleOpt('voice_enabled')">Sesli DJ: ...</button>
+        <button id="btnAuto" onclick="toggleOpt('periodic_enabled')">Döngü Rehber: ...</button>
+      </div>
+      <div class="row">
+        <button class="prim" onclick="sendAnnounce()">📢 Çok Dilli Rehber Gönder</button>
+        <button onclick="testLang('ru','Привет! А где я и как сменить костюм?')">🇷🇺 Bot Test</button>
+        <button onclick="testLang('en','Hello! How do I join the dance and change outfit?')">🇬🇧 Bot Test</button>
+        <button onclick="testLang('tr','Nasıl halaya katılırım ve kostüm değiştiririm?')">🇹🇷 Bot Test</button>
+      </div>
+      <div class="row" style="margin-top:6px">
+        <input id="sessInp" type="password" placeholder="TikTok sessionid (TikTok yorum kutusuna otomatik yazmak için)" />
+        <button onclick="saveSession()">💾 SessionID Kaydet</button>
+      </div>
+      <div id="statLine" class="note"></div>
+      <h2 style="margin:6px 0">🤖 Bot Yanıtları &amp; Altyazılar</h2>
+      <div id="aiFeed" class="feed"></div>
+    </div>
+
+    <div class="card">
+      <div class="head"><h2>💬 Canlı TikTok Sohbet &amp; Etkinlik Akışı</h2><span id="wsBadge" class="pill">Bağlanıyor...</span></div>
+      <div id="roomBadge" class="note" style="margin-top:0">Oda: @mert.can.yldz2</div>
+      <div id="liveFeed" class="feed" style="height:280px"></div>
+    </div>
+
+    <div class="card">
+      <div class="head"><h2>⚡ Sistem, Kuyruk &amp; Etkinlik Motoru</h2><span id="sysBadge" class="pill">Hazır</span></div>
+      <div id="sysMetrics" class="note">Kuyruk: 0 | Dedup: 0 | İşlenen: 0 | RAM: - MB</div>
+      <div class="sec">Zamanlanmış Etkinlikler &amp; !oy A/B/C Anketi</div>
+      <div class="row">
+        <button onclick="triggerEv('start','disco_mode')">🪩 Disko Modu</button>
+        <button onclick="triggerEv('start','giant_roach')">🪲 Dev Böcek</button>
+        <button onclick="triggerEv('start','meteor_rain')">☄️ Meteor Şoku</button>
+        <button onclick="triggerEv('start','halay_war')">⚔️ Gelin vs Damat</button>
+        <button onclick="triggerEv('surprise')">🎲 Sürpriz</button>
+        <button class="prim" onclick="triggerEv('poll')">🗳️ !oy A/B/C Başlat</button>
+        <button onclick="triggerEv('stop')">⏹️ Durdur</button>
+      </div>
+      <div id="evStatusLine" class="note">Aktif Etkinlik: Yok</div>
+      <div class="sec">Sahnedeki Dansçılar (<span id="seatLabel">0/24</span>) &amp; Sıra</div>
+      <div id="dancerList" class="feed" style="height:175px"></div>
+    </div>
+
+    <div class="card">
+      <div class="head"><h2>🎁 Hediye Kuralları &amp; 🏆 Kalıcı XP Sıralaması</h2><button onclick="exportRulesJson()">⬇️ JSON</button></div>
+      <div class="row">
+        <label style="font-size:11.5px;color:var(--muted)">Beğeni Eşiği:</label>
+        <input id="likeThreshInp" type="number" min="1" max="5000" value="100" style="max-width:90px" />
+        <button class="ok" onclick="saveGiftRules()">💾 Kuralları Kaydet</button>
+        <button onclick="document.getElementById('importRulesInp').click()">⬆️ İçe Aktar</button>
+        <input id="importRulesInp" type="file" accept=".json" style="display:none" onchange="importRulesJson(event)" />
+      </div>
+      <div id="giftRulesList" class="feed" style="height:125px;margin-bottom:8px"></div>
+      <div class="sec">Kalıcı XP Liderleri &amp; Takım Geçmişi</div>
+      <div id="xpList" class="feed" style="height:140px"></div>
+    </div>
+  </div>
+<script>
+let state = {}, dirState = { atmosphere: 'day', camera: 'auto', hud_lang: 'auto', vs_mode: 'auto' }, sock = null;
+const aiFeed = document.getElementById('aiFeed'), liveFeed = document.getElementById('liveFeed');
+function esc(s) { return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function addCard(box, cls, title, sub, body) {
+  const d = document.createElement('div'); d.className = 'item ' + cls;
+  d.innerHTML = `<div class="meta"><strong>${esc(title)}</strong><span>${esc(sub)}</span></div><div>${esc(body)}</div>`;
+  box.prepend(d); while (box.children.length > 50) box.lastChild.remove();
+}
+function renderOpts() {
+  const b1 = document.getElementById('btnAi'), b2 = document.getElementById('btnVoice'), b3 = document.getElementById('btnAuto'), b4 = document.getElementById('btnOpenDj');
+  b1.textContent = `Oto Sohbet Botu: ${state.enabled ? 'AÇIK' : 'KAPALI'}`; b1.classList.toggle('on', !!state.enabled);
+  b2.textContent = `Sesli DJ: ${state.voice_enabled ? 'AÇIK' : 'KAPALI'}`; b2.classList.toggle('on', !!state.voice_enabled);
+  b3.textContent = `Döngü Rehber: ${state.periodic_enabled ? 'AÇIK' : 'KAPALI'}`; b3.classList.toggle('on', !!state.periodic_enabled);
+  b4.textContent = `Açık DJ Modu: ${state.open_multilang_dj ? 'TÜM İZLEYİCİLER' : 'SADECE VIP'}`; b4.classList.toggle('on', !!state.open_multilang_dj);
+  const cm = document.getElementById('chatModeBadge');
+  if (state.has_session_id) {
+    cm.textContent = '🟢 TikTok Sohbet Yazma AKTİF'; cm.className = 'pill';
+  } else {
+    cm.textContent = '🟡 Sahne+Ses Aktif (TikTok Yazı İçin SessionID)'; cm.className = 'pill warn';
+  }
+  document.getElementById('statLine').textContent = `Model: ${state.model || '-'} | Döngü: ${state.interval_sec || 90}s | TikTok Canlı: ${state.is_live_connected ? 'Bağlı' : 'Bekliyor'}`;
+}
+function renderDir() {
+  document.querySelectorAll('button[data-dir]').forEach(btn => btn.classList.toggle('on', dirState[btn.dataset.dir] === btn.dataset.val));
+  document.getElementById('dirBadge').textContent = `${dirState.atmosphere.toUpperCase()} • ${dirState.hud_lang.toUpperCase()}`;
+}
+async function loadState() {
+  const [rAi, rDir] = await Promise.all([fetch('/api/ai/state'), fetch('/api/director/state')]);
+  state = await rAi.json(); renderOpts();
+  dirState = await rDir.json(); renderDir();
+  aiFeed.innerHTML = ''; (state.history || []).slice(0, 20).reverse().forEach(x => addCard(aiFeed, 'ai', `${x.flag || '🎧'} ${x.lang_label || x.kind}`, (x.sent_to_tiktok || x.chat_sent) ? 'TikTok Yazılı ✓' : 'Altyazı+Ses', x.text));
+}
+async function setDir(k, v) {
+  const r = await fetch('/api/director/control', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({[k]: v}) });
+  dirState = await r.json(); renderDir();
+}
+async function fireFx(fx) { await fetch('/api/fx/test', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({fx}) }); }
+let tikoState = { maxDancers: 200, paraSeconds: 5, camera: 'sinematik', format: 'dikey', genderSwap: true };
+async function fireWorldFx(fx) { await fetch('/api/world/fx', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({fx}) }); }
+async function setTikoyunOpt(patch) {
+  const r = await fetch('/api/tikoyun/settings', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(patch) });
+  const res = await r.json();
+  if (res && res.ok) {
+    tikoState = res;
+    const md = document.getElementById('inpMaxDancers'); const lmd = document.getElementById('lblMaxDancers');
+    const ps = document.getElementById('inpParaSec'); const lps = document.getElementById('lblParaSec');
+    if (md && res.maxDancers != null) { md.value = res.maxDancers; if (lmd) lmd.textContent = res.maxDancers; }
+    if (ps && res.paraSeconds != null) { ps.value = res.paraSeconds; if (lps) lps.textContent = res.paraSeconds; }
+  }
+}
+async function econTest(payload) { await fetch('/api/economy/test', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) }); }
+async function reqSong(lang, flag, query, nickname) {
+  await fetch('/api/jukebox/request_multilang', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({lang, flag, query, nickname}) });
+}
+function reloadStream() { if (sock && sock.readyState === 1) sock.send(JSON.stringify({action: 'reload_overlays'})); }
+async function toggleOpt(k) {
+  const r = await fetch('/api/ai/options', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({[k]: !state[k]}) });
+  state = await r.json(); renderOpts();
+}
+async function toggleOpenDj() {
+  const r = await fetch('/api/ai/options', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({open_multilang_dj: !state.open_multilang_dj}) });
+  state = await r.json(); renderOpts();
+}
+async function saveSession() {
+  const v = document.getElementById('sessInp').value.trim();
+  const r = await fetch('/api/ai/options', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({session_id: v}) });
+  state = await r.json(); document.getElementById('sessInp').value = ''; renderOpts();
+}
+async function sendAnnounce() { await fetch('/api/ai/announce', { method: 'POST' }); }
+async function sendManualChat() {
+  const inp = document.getElementById('manualChatInp');
+  const text = inp.value.trim(); if (!text) return;
+  const lang = document.getElementById('manualLang').value;
+  const speak = document.getElementById('manualSpeakChk').checked;
+  inp.value = '';
+  const r = await fetch('/api/ai/send_chat', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({text, lang, speak}) });
+  const d = await r.json();
+  addCard(liveFeed, 'bot', '💬 Yayıncı Botu', d.delivered_to_tiktok ? 'TikTok Chat ✓' : 'Sahne HUD ✓', d.text || text);
+}
+async function testLang(lang, text) {
+  await fetch('/api/ai/test', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ nickname: `Test_${lang.toUpperCase()}`, text }) });
+}
+function connectWs() {
+  sock = new WebSocket(`ws://${location.host}/ws`);
+  const b = document.getElementById('wsBadge');
+  sock.onopen = () => { b.textContent = 'Canlı Bağlı ✓'; };
+  sock.onclose = () => { b.textContent = 'Yeniden bağlanıyor...'; setTimeout(connectWs, 2000); };
+  sock.onmessage = (ev) => {
+    let m; try { m = JSON.parse(ev.data); } catch { return; }
+    if (m.type === 'status' && m.username) document.getElementById('roomBadge').textContent = 'Oda: @' + m.username;
+    if (m.type === 'director_control') { dirState = { ...dirState, ...m }; renderDir(); }
+    if (m.type === 'chat' && m.user) addCard(liveFeed, '', `${m.flag || m.user.flag || '💬'} ${m.user.nickname || 'İzleyici'}`, (m.lang || 'tr').toUpperCase(), m.raw_text || m.text);
+    if (m.type === 'gift' && m.user) addCard(liveFeed, 'gift', `${m.user.flag || '⭐'} ${m.user.nickname || 'Destekçi'}`, `${m.gift_name} x${m.repeat_count || 1}`, `${m.diamonds || 0} elmas`);
+    if (m.type === 'bot_chat_reply') addCard(liveFeed, 'bot', '🤖 Bot Yanıtı', m.delivered ? 'TikTok Chat ✓' : 'Sahne HUD ✓', m.text);
+    if (m.type === 'ai_host') addCard(aiFeed, 'ai', `${m.flag || '🎧'} ${m.kind === 'periodic' ? 'Oto Rehber' : m.lang_label}`, (m.sent_to_tiktok || m.chat_sent) ? 'TikTok Yazılı ✓' : 'Altyazı+Ses', m.text);
+  };
+}
+let giftSettingsObj = { rules: [] };
+async function refreshProTelemetry() {
+  try {
+    const [mRes, vRes] = await Promise.all([fetch('/api/system/metrics'), fetch('/api/viewers/top')]);
+    const m = await mRes.json();
+    const v = await vRes.json();
+    if (m.ok) {
+      const ee = m.event_engine || {};
+      const sc = m.scheduler || {};
+      const pr = m.process || {};
+      document.getElementById('sysMetrics').textContent = `Kuyruk: ${ee.queued || 0} | İşlenen: ${ee.processed || 0} | Dedup: ${ee.dedup_dropped || 0} | Beğeni Grubu: ${ee.coalesced_likes || 0} | RAM: ${pr.rss_mb || '-'} MB`;
+      document.getElementById('sysBadge').textContent = `${m.ws_clients || 0} WS • ${m.seats?.active || 0}/${m.seats?.max || 24}`;
+      document.getElementById('evStatusLine').textContent = sc.active_event
+        ? `Aktif Etkinlik: ${sc.active_event.name || sc.active_event.id} (${sc.active_event.duration || 30}s)`
+        : (sc.active_poll ? `Anket Açık (${sc.active_poll.total_votes || 0} oy)` : 'Aktif Etkinlik: Yok');
+      document.getElementById('seatLabel').textContent = `${m.seats?.active || 0}/${m.seats?.max || 24} (+${m.seats?.queue || 0} sıra)`;
+      const dBox = document.getElementById('dancerList');
+      dBox.innerHTML = '';
+      (m.dancers || []).slice(0, 30).forEach(d => {
+        const row = document.createElement('div');
+        row.className = 'item';
+        row.innerHTML = `<div class="meta"><strong>${esc(d.nickname)} ${d.vip ? '⭐' : ''}</strong><span>${esc(d.outfit || 'standart')} • ${d.diamonds || 0} 💎</span></div><div class="row" style="margin:2px 0 0"><button onclick="dancerAct('promote_halaybasi','${esc(d.uid)}')">👑 Halaybaşı</button><button onclick="dancerAct('kick','${esc(d.uid)}')">🚪 Çıkar</button></div>`;
+        dBox.appendChild(row);
+      });
+    }
+    if (v.ok) {
+      const xBox = document.getElementById('xpList');
+      xBox.innerHTML = '';
+      (v.top_xp || []).forEach((u, idx) => {
+        const row = document.createElement('div');
+        row.className = 'item gift';
+        row.innerHTML = `<div class="meta"><strong>#${idx + 1} ${esc(u.nickname)} (Lv.${u.level})</strong><span>${u.xp} XP • ${u.total_diamonds} 💎</span></div>`;
+        xBox.appendChild(row);
+      });
+      (v.team_history || []).slice(0, 3).forEach(h => {
+        const row = document.createElement('div');
+        row.className = 'item bot';
+        row.innerHTML = `<div class="meta"><strong>🏁 ${h.round_number}. Tur: ${esc(String(h.winner_team || '').toUpperCase())}</strong><span>Gelin ${h.gelin_score} - ${h.damat_score} Damat</span></div>`;
+        xBox.appendChild(row);
+      });
+    }
+  } catch (e) {}
+}
+async function loadGiftRulesPanel() {
+  try {
+    const r = await fetch('/api/gifts/rules');
+    const d = await r.json();
+    if (!d.ok) return;
+    giftSettingsObj = d.settings || { rules: [] };
+    document.getElementById('likeThreshInp').value = d.like_threshold || 100;
+    const gBox = document.getElementById('giftRulesList');
+    gBox.innerHTML = '';
+    (giftSettingsObj.rules || []).forEach((rule, idx) => {
+      const row = document.createElement('div');
+      row.className = 'item';
+      row.innerHTML = `<div class="meta"><strong>${esc(rule.name || rule.id)}</strong><span>${esc(rule.action || '')} • Eşik: <input data-ridx="${idx}" type="number" min="1" value="${Number(rule.min || 1)}" style="width:68px;padding:2px 5px" /></span></div>`;
+      gBox.appendChild(row);
+    });
+  } catch (e) {}
+}
+async function saveGiftRules() {
+  document.querySelectorAll('input[data-ridx]').forEach(inp => {
+    const idx = Number(inp.dataset.ridx);
+    if (giftSettingsObj.rules && giftSettingsObj.rules[idx]) {
+      giftSettingsObj.rules[idx].min = Math.max(1, Number(inp.value || 1));
+    }
+  });
+  const likeThresh = Math.max(1, Number(document.getElementById('likeThreshInp').value || 100));
+  await fetch('/api/gifts/rules', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ settings: giftSettingsObj, like_threshold: likeThresh }) });
+  loadGiftRulesPanel();
+}
+function exportRulesJson() {
+  const blob = new Blob([JSON.stringify(giftSettingsObj, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'halay_gift_rules.json'; a.click();
+}
+async function importRulesJson(ev) {
+  const file = ev.target.files && ev.target.files[0]; if (!file) return;
+  try {
+    const parsed = JSON.parse(await file.text());
+    if (parsed && typeof parsed === 'object') {
+      giftSettingsObj = parsed;
+      await fetch('/api/gifts/rules', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ settings: giftSettingsObj }) });
+      loadGiftRulesPanel();
+    }
+  } catch (e) {}
+}
+async function dancerAct(action, uid) {
+  await fetch('/api/dancers/action', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ action, uid }) });
+  refreshProTelemetry();
+}
+async function triggerEv(action, event_id) {
+  await fetch('/api/events/trigger', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ action, event_id }) });
+  refreshProTelemetry();
+}
+loadState(); loadGiftRulesPanel(); refreshProTelemetry(); connectWs();
+setInterval(refreshProTelemetry, 4000);
+</script>
+</body>
+</html>

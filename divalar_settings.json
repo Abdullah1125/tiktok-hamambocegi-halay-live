@@ -1,0 +1,99 @@
+{
+  "version": 4,
+  "camera": "sinematik",
+  "format": "dikey",
+  "genderSwap": true,
+  "maxDancers": 50,
+  "paraSeconds": 5,
+  "rules": [
+    {
+      "id": "r-parfum",
+      "trigger": "gift",
+      "action": "davulcu",
+      "gift": {
+        "id": 5658,
+        "name": "Parfüm",
+        "image": "https://p16-webcast.tiktokcdn.com/img/maliva/webcast-va/20b8f61246c7b6032777bb81bf4ee055~tplv-obj.webp",
+        "diamond": 20
+      }
+    },
+    {
+      "id": "r-kalp",
+      "trigger": "gift",
+      "action": "halaybasi",
+      "gift": {
+        "id": 5879,
+        "name": "Donat",
+        "image": "https://p16-webcast.tiktokcdn.com/img/maliva/webcast-va/4e7ad6bdf0a1d860c538f38026d4e812~tplv-obj.webp",
+        "diamond": 30
+      }
+    },
+    {
+      "id": "r-cay",
+      "trigger": "gift",
+      "action": "zurnaci",
+      "gift": {
+        "id": 5303,
+        "name": "Çay",
+        "image": "https://p16-webcast.tiktokcdn.com/img/maliva/webcast-va/c84fe43f3177684b07ad2f13138a852d~tplv-obj.webp",
+        "diamond": 50
+      }
+    },
+    {
+      "id": "r-aile",
+      "trigger": "gift",
+      "action": "konfeti",
+      "gift": {
+        "id": 11495,
+        "name": "Aile",
+        "image": "https://p16-webcast.tiktokcdn.com/img/maliva/webcast-va/resource/8821932e2d3fe78e9af0bcf785ca1759.png~tplv-obj.webp",
+        "diamond": 90
+      }
+    },
+    {
+      "id": "r-galaksi",
+      "trigger": "gift",
+      "action": "gelin",
+      "gift": {
+        "id": 5924,
+        "name": "Elle Kalp",
+        "image": "https://p16-webcast.tiktokcdn.com/img/maliva/webcast-va/47e9081623cdae9faa55f4d0d67908bf~tplv-obj.webp",
+        "diamond": 100
+      }
+    },
+    {
+      "id": "r-aslan",
+      "trigger": "gift",
+      "action": "damat",
+      "gift": {
+        "id": 6097,
+        "name": "Küçük Taç",
+        "image": "https://p16-webcast.tiktokcdn.com/img/maliva/webcast-va/cf3db11b94a975417043b53401d0afe1~tplv-obj.webp",
+        "diamond": 99
+      }
+    },
+    {
+      "id": "r-para",
+      "trigger": "gift",
+      "action": "parasac",
+      "gift": {
+        "id": 5502,
+        "name": "Taç",
+        "image": "https://p16-webcast.tiktokcdn.com/img/maliva/webcast-va/3070d46dd3a4ab39c24f094e14996784.png~tplv-obj.webp",
+        "diamond": 199
+      }
+    },
+    {
+      "id": "r-gul",
+      "trigger": "gift",
+      "action": "katil",
+      "min_count": 20,
+      "gift": {
+        "id": 5655,
+        "name": "Gül",
+        "image": "https://p16-webcast.tiktokcdn.com/img/maliva/webcast-va/eba3a9bb85c33e017f3648eaf88d7189~tplv-obj.webp",
+        "diamond": 1
+      }
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "tiktok_username": "cs2premiergunlukleri",
+  "tiktok_session_id": "",
+  "economy_version": 2,
+  "like_threshold": 100,
+  "tier2_min": 20,
+  "tier3_min": 30,
+  "gift_join_only": true,
+  "join_min_diamonds": 20,
+  "scene_mode": "kirdgunu_ring",
+  "avatar_style": "roach",
+  "music_preset": "halay",
+  "tts_enabled": true,
+  "join_on_keyword": false,
+  "join_on_any_chat": false,
+  "join_on_follow": false,
+  "join_on_enter": false
+}

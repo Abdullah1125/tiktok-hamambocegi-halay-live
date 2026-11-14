@@ -1,0 +1,48 @@
+{
+  "current_scene": "TikTok LIVE - Bocek Halayi (9:16)",
+  "current_program_scene": "TikTok LIVE - Bocek Halayi (9:16)",
+  "name": "TikTok_Kir_Dugunu_Halay_1080x1920",
+  "scene_order": [
+    {
+      "name": "TikTok LIVE - Bocek Halayi (9:16)"
+    }
+  ],
+  "sources": [
+    {
+      "id": "browser_source",
+      "name": "Halay_3D_Canli_Sahne",
+      "settings": {
+        "fps": 60,
+        "fps_custom": true,
+        "height": 1920,
+        "reroute_audio": true,
+        "shutdown": false,
+        "url": "http://127.0.0.1:9944/?obs=1",
+        "width": 1080
+      }
+    },
+    {
+      "id": "scene",
+      "name": "TikTok LIVE - Bocek Halayi (9:16)",
+      "settings": {
+        "custom_size": false,
+        "id_counter": 1,
+        "items": [
+          {
+            "align": 5,
+            "bounds": { "x": 1080.0, "y": 1920.0 },
+            "bounds_align": 0,
+            "bounds_type": 2,
+            "id": 1,
+            "locked": false,
+            "name": "Halay_3D_Canli_Sahne",
+            "pos": { "x": 0.0, "y": 0.0 },
+            "rot": 0.0,
+            "scale": { "x": 1.0, "y": 1.0 },
+            "visible": true
+          }
+        ]
+      }
+    }
+  ]
+}
