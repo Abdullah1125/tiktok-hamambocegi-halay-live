@@ -490,6 +490,16 @@ async def car_race_page() -> FileResponse:
     return FileResponse(str(STATIC_DIR / "araba.html"), headers={"Cache-Control": "no-cache"})
 
 
+@app.get("/slime")
+async def slime_arena_page() -> FileResponse:
+    return FileResponse(str(STATIC_DIR / "slime.html"), headers={"Cache-Control": "no-cache"})
+
+
+@app.get("/futbol")
+async def football_page() -> FileResponse:
+    return FileResponse(str(STATIC_DIR / "futbol.html"), headers={"Cache-Control": "no-cache"})
+
+
 @app.get("/local_sdk.js")
 async def serve_local_sdk() -> FileResponse:
     return FileResponse(

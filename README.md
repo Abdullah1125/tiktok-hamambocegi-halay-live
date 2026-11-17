@@ -34,3 +34,10 @@ Başka bir bilgisayarda tek tıkla kurup `@cs2premiergunlukleri` hesabından can
   - Kamera hızlanan / yeni katılan izleyicinin arabasına doğru gider.
   - İlk bitiren turu kazanır, yeni tur otomatik başlar. Pist uzunluğu: `/araba?obs=1&mesafe=1200`.
   - Test: `/araba?demo=1` ya da klavyede `1` (gül), `2` (hediye), `3` (beğeni), `4` (büyük hediye).
+- **🟢 Slime Arena:** `http://127.0.0.1:9944/slime?obs=1`
+  - 🌹 Gül → slime ol / büyü · 🎵 TikTok → DASH · 🎮 GG → şok dalgası · 🍦 Dondurma → yakındakileri dondur · 🫰 Parmak kalp → kalkan · 🍩 Donut → MEGA büyüme · ❤️ beğeni → büyüme.
+  - Büyük slime küçüğü yutar; süre (`&sure=180` sn) bitince en büyük kazanır.
+- **⚽ Canlı Futbol:** `http://127.0.0.1:9944/futbol?obs=1`
+  - 🌹 Gül → takıma gir (yorum `1` 🔴 / `2` 🔵) · 🎵 TikTok → SPRINT · 🎮 GG → GÜÇLÜ ŞUT · 🍦 Dondurma → rakip kaleciyi dondur · 🫰 Parmak kalp → ALTIN ŞUT · 🍩 Donut → PENALTI.
+  - Maç süresi `&sure=180` sn; eksik takımları botlar tamamlar.
+- Slime ve Futbol testi: `?demo=1` ya da klavye `1` gül, `2` TikTok, `3` GG, `4` dondurma, `5` parmak kalp, `6` donut, `7` beğeni, `8` yorum.
