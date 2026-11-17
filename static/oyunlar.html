@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Canlı Yayın Oyunları</title>
+  <style>
+    :root { --bg:#0b1020; --card:#151b33; --line:rgba(255,255,255,.12); --text:#f2f4ff; --muted:#a7b0d6; --gold:#ffd54a; --pink:#ff3d7f; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--text); font-family:"Segoe UI",system-ui,sans-serif; padding:32px 16px; }
+    main { max-width:960px; margin:0 auto; }
+    h1 { font-size:32px; margin:0 0 6px; }
+    p.lead { color:var(--muted); margin:0 0 28px; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:18px; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:18px; padding:22px; display:flex; flex-direction:column; gap:12px; }
+    .card .icon { font-size:46px; }
+    .card h2 { margin:0; font-size:22px; }
+    .card ul { margin:0; padding-left:18px; color:var(--muted); line-height:1.6; }
+    .card b { color:var(--gold); }
+    .btns { display:flex; gap:10px; flex-wrap:wrap; margin-top:auto; }
+    a.btn { text-decoration:none; color:#fff; background:var(--pink); padding:10px 16px; border-radius:10px; font-weight:700; }
+    a.btn.alt { background:transparent; border:1px solid var(--line); }
+    code { background:rgba(255,255,255,.08); padding:2px 6px; border-radius:6px; font-size:13px; word-break:break-all; }
+    .obs { color:var(--muted); font-size:13px; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>🎮 Canlı Yayın Oyunları</h1>
+  <p class="lead">Aynı TikTok bağlantısını kullanır. OBS / TikTok LIVE Studio'da tarayıcı kaynağını istediğin oyunun adresine ayarla (1080×1920).</p>
+  <div class="grid">
+    <section class="card">
+      <div class="icon">💃</div>
+      <h2>Hamamböceği Halay</h2>
+      <ul>
+        <li><b>Beğeni / Gül</b> ile halaya katıl</li>
+        <li>Hediyelerle halaybaşı, gelin, damat ol</li>
+      </ul>
+      <div class="obs">OBS: <code>/?obs=1</code></div>
+      <div class="btns"><a class="btn" href="/">Aç</a><a class="btn alt" href="/?obs=1">OBS görünümü</a></div>
+    </section>
+    <section class="card">
+      <div class="icon">🏎️</div>
+      <h2>Araba Yarışı</h2>
+      <ul>
+        <li><b>🌹 Gül</b> at → arabanla yarışa katıl</li>
+        <li><b>❤️ Beğeni</b>, <b>💬 yorum</b>, takip, paylaşım → hızlan</li>
+        <li><b>🎁 Hediye</b> → NİTRO, kamera sana gelir</li>
+        <li>İlk bitiren turu kazanır, yeni tur otomatik başlar</li>
+      </ul>
+      <div class="obs">OBS: <code>/araba?obs=1</code> · Test: klavye 1/2/3/4</div>
+      <div class="btns"><a class="btn" href="/araba">Aç</a><a class="btn alt" href="/araba?obs=1">OBS görünümü</a><a class="btn alt" href="/araba?demo=1">Demo</a></div>
+    </section>
+  </div>
+</main>
+</body>
+</html>

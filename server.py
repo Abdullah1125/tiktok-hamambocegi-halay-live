@@ -480,6 +480,16 @@ async def legacy_index_page() -> FileResponse:
     return FileResponse(str(STATIC_DIR / "index.html"), headers={"Cache-Control": "no-cache"})
 
 
+@app.get("/oyunlar")
+async def games_hub_page() -> FileResponse:
+    return FileResponse(str(STATIC_DIR / "oyunlar.html"), headers={"Cache-Control": "no-cache"})
+
+
+@app.get("/araba")
+async def car_race_page() -> FileResponse:
+    return FileResponse(str(STATIC_DIR / "araba.html"), headers={"Cache-Control": "no-cache"})
+
+
 @app.get("/local_sdk.js")
 async def serve_local_sdk() -> FileResponse:
     return FileResponse(

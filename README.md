@@ -23,3 +23,14 @@ Başka bir bilgisayarda tek tıkla kurup `@cs2premiergunlukleri` hesabından can
 
 - `static/audio/halay_cache/` müzik dosyaları repo boyutunu küçük tutmak için dahil edilmemiştir; `jukebox_service.py` yayındayken `data/halay_100_catalog.json` listesindeki parçaları otomatik indirir. İstersen tüm 100 parçayı önceden indirmek için `python scripts/harvest_100_halay.py` çalıştırabilirsin.
 - `config.json` içindeki `tiktok_session_id` güvenlik nedeniyle boş bırakılmıştır.
+
+## 🎮 Oyunlar
+
+- **Oyun listesi:** `http://127.0.0.1:9944/oyunlar`
+- **💃 Halay:** `http://127.0.0.1:9944/?obs=1`
+- **🏎️ Araba Yarışı:** `http://127.0.0.1:9944/araba?obs=1`
+  - 🌹 Gül (veya herhangi bir hediye) atan izleyici kendi arabasıyla yarışa katılır.
+  - ❤️ Beğeni, 💬 yorum, ➕ takip, 🔄 paylaşım → hızlanır; 🎁 hediye → NİTRO.
+  - Kamera hızlanan / yeni katılan izleyicinin arabasına doğru gider.
+  - İlk bitiren turu kazanır, yeni tur otomatik başlar. Pist uzunluğu: `/araba?obs=1&mesafe=1200`.
+  - Test: `/araba?demo=1` ya da klavyede `1` (gül), `2` (hediye), `3` (beğeni), `4` (büyük hediye).

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Araba Yarışı — TikTok Live</title>
+  <script type="importmap">
+    { "imports": { "three": "/static/vendor/three.module.min.js" } }
+  </script>
+  <style>
+    :root { --gold:#ffd54a; --pink:#ff3d7f; --cyan:#33e1ff; --panel:rgba(10,12,24,.62); }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    html,body { width:100%; height:100%; overflow:hidden; background:#0b1020; font-family:"Segoe UI",system-ui,sans-serif; color:#fff; }
+    #scene { position:fixed; inset:0; }
+    .hud { position:fixed; pointer-events:none; z-index:5; }
+    #title { top:2.2vh; left:0; right:0; text-align:center; }
+    #title h1 { font-size:4.6vh; font-weight:900; letter-spacing:.06em; text-shadow:0 .4vh 1.2vh #000, 0 0 2vh var(--pink); }
+    #title .rules { margin:1vh auto 0; display:inline-flex; gap:1.2vh; flex-wrap:wrap; justify-content:center; padding:0 2vh; }
+    .chip { background:var(--panel); border:1px solid rgba(255,255,255,.18); border-radius:99px; padding:.6vh 1.3vh; font-size:1.7vh; font-weight:700; backdrop-filter:blur(6px); }
+    .chip b { color:var(--gold); }
+    #board { top:19vh; left:1.6vh; width:34vh; background:var(--panel); border-radius:1.6vh; padding:1.2vh; border:1px solid rgba(255,255,255,.14); backdrop-filter:blur(6px); }
+    #board h2 { font-size:2vh; color:var(--gold); margin-bottom:.8vh; display:flex; justify-content:space-between; }
+    .row { display:flex; align-items:center; gap:.8vh; margin:.5vh 0; font-size:1.8vh; font-weight:700; }
+    .row .pos { width:3vh; text-align:center; font-weight:900; }
+    .row .sw { width:1.4vh; height:1.4vh; border-radius:.3vh; flex:none; }
+    .row .nm { flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .row .bar { position:relative; height:.6vh; background:rgba(255,255,255,.15); border-radius:9px; margin-top:.3vh; overflow:hidden; }
+    .row .bar i { position:absolute; inset:0 auto 0 0; background:linear-gradient(90deg,var(--cyan),var(--pink)); }
+    .row .kmh { font-size:1.5vh; color:#9fe8ff; width:7vh; text-align:right; }
+    #status { top:19vh; right:1.6vh; background:var(--panel); border-radius:1.6vh; padding:1vh 1.4vh; text-align:right; border:1px solid rgba(255,255,255,.14); }
+    #status .big { font-size:2.6vh; font-weight:900; color:var(--gold); }
+    #status .sm { font-size:1.6vh; opacity:.85; }
+    #feed { bottom:16vh; left:1.6vh; right:1.6vh; display:flex; flex-direction:column-reverse; gap:.7vh; align-items:flex-start; }
+    .toast { background:var(--panel); border-left:.6vh solid var(--gold); border-radius:1vh; padding:.8vh 1.4vh; font-size:2vh; font-weight:700; animation:pop .35s ease-out; max-width:90%; }
+    .toast.join { border-color:#ff4d6d; } .toast.nitro { border-color:var(--cyan); } .toast.like { border-color:#ff8fb1; }
+    @keyframes pop { from { transform:translateX(-30%); opacity:0; } to { transform:none; opacity:1; } }
+    #center { top:38vh; left:0; right:0; text-align:center; }
+    #center .msg { display:inline-block; font-size:7vh; font-weight:900; text-shadow:0 0 3vh var(--pink),0 .5vh 1vh #000; animation:zoom .5s ease-out; }
+    #center .sub { font-size:2.6vh; font-weight:700; margin-top:1vh; text-shadow:0 .3vh .8vh #000; }
+    @keyframes zoom { from { transform:scale(2.2); opacity:0; } to { transform:none; opacity:1; } }
+    #focus { bottom:6vh; left:0; right:0; text-align:center; }
+    #focus span { display:inline-block; background:linear-gradient(90deg,var(--pink),#ff9a3d); padding:1vh 2.4vh; border-radius:99px; font-size:2.6vh; font-weight:900; box-shadow:0 0 3vh rgba(255,61,127,.6); }
+    #conn { top:.6vh; right:.8vh; font-size:1.3vh; opacity:.6; }
+    body.obs #conn { display:none; }
+  </style>
+</head>
+<body>
+  <canvas id="scene"></canvas>
+  <div id="title" class="hud">
+    <h1>🏎️ ARABA YARIŞI 🏁</h1>
+    <div class="rules">
+      <span class="chip">🌹 <b>Gül</b> at → yarışa katıl</span>
+      <span class="chip">❤️ <b>Beğeni</b> = hız</span>
+      <span class="chip">💬 <b>Yorum</b> = gaz</span>
+      <span class="chip">🎁 <b>Hediye</b> = NİTRO</span>
+    </div>
+  </div>
+  <div id="board" class="hud"><h2><span>🏆 SIRALAMA</span><span id="racerCount">0</span></h2><div id="rows"></div></div>
+  <div id="status" class="hud"><div class="big" id="lapTxt">BEKLENİYOR</div><div class="sm" id="lapSub">İlk gülü at, yarış başlasın!</div></div>
+  <div id="feed" class="hud"></div>
+  <div id="center" class="hud"></div>
+  <div id="focus" class="hud"></div>
+  <div id="conn" class="hud">●</div>
+  <script type="module" src="/static/js/araba_race.js?v=1"></script>
+</body>
+</html>
